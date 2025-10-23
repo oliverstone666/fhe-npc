@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BrowserProvider, Contract, TransactionReceipt, TransactionResponse } from 'ethers';
 import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 import { initSDK, createInstance, SepoliaConfig, type FhevmInstance } from '@zama-fhe/relayer-sdk/bundle';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 import {
   CONFIDENTIAL_GAME_COIN_CONTRACT,
@@ -27,6 +28,12 @@ type UiNotice = {
   message: string;
 };
 
+type EthereumProvider = {
+  request: (args: { method: string; params?: unknown[] | Record<string, unknown> }) => Promise<unknown>;
+  on?: (event: string, listener: (...args: unknown[]) => void) => void;
+  removeListener?: (event: string, listener: (...args: unknown[]) => void) => void;
+};
+
 const ZERO_HANDLE = '0x0000000000000000000000000000000000000000000000000000000000000000';
 
 export function QuestApp() {
@@ -49,7 +56,7 @@ export function QuestApp() {
 
   useEffect(() => {
     if (!questConfigured) {
-      setNotice({ kind: 'error', message: 'Contract addresses missing. Update the environment variables.' });
+      setNotice({ kind: 'error', message: 'Contract addresses missing. Please configure deployed contracts.' });
     }
   }, [questConfigured]);
 
@@ -62,8 +69,11 @@ export function QuestApp() {
 
       try {
         await initSDK();
-        const injected = (window as Window & { ethereum?: unknown }).ethereum;
-        const instance = await createInstance({ ...SepoliaConfig, network: (injected ?? undefined) as any });
+        const injected = (window as Window & { ethereum?: EthereumProvider }).ethereum ?? null;
+        const instance = await createInstance({
+          ...SepoliaConfig,
+          network: injected ?? SepoliaConfig.network,
+        });
         if (cancelled) return;
         const keypair = instance.generateKeypair();
         setFheInstance(instance);
@@ -143,11 +153,11 @@ export function QuestApp() {
     if (typeof window === 'undefined') {
       throw new Error('Wallet not detected. Connect a wallet to continue.');
     }
-    const rawProvider = (window as Window & { ethereum?: unknown }).ethereum;
+    const rawProvider = (window as Window & { ethereum?: EthereumProvider }).ethereum;
     if (!rawProvider) {
       throw new Error('Wallet not detected. Connect a wallet to continue.');
     }
-    const provider = new BrowserProvider(rawProvider as any);
+    const provider = new BrowserProvider(rawProvider);
     return provider.getSigner();
   }, []);
 
@@ -380,8 +390,15 @@ export function QuestApp() {
   return (
     <div className="quest-container">
       <header className="quest-header">
-        <h1>Zama Encrypted Quest</h1>
-        <p>Complete the encrypted errands from three mysterious NPCs to claim your Zama NFT.</p>
+        <div className="quest-header-bar">
+          <div className="quest-header-copy">
+            <h1>Zama Encrypted Quest</h1>
+            <p>Complete the encrypted errands from three mysterious NPCs to claim your Zama NFT.</p>
+          </div>
+          <div className="quest-header-action">
+            <ConnectButton accountStatus="address" chainStatus="icon" showBalance={false} label="Connect Wallet" />
+          </div>
+        </div>
       </header>
 
       {notice.kind && <div className={`quest-notice ${notice.kind}`}>{notice.message}</div>}
