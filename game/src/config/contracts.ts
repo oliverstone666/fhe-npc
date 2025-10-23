@@ -12,9 +12,9 @@ function resolveAddress(envKey: string): `0x${string}` {
   return ZERO_ADDRESS as `0x${string}`;
 }
 
-export const ZAMA_QUEST_ADDRESS = resolveAddress('VITE_ZAMA_QUEST_ADDRESS');
-export const GAME_ITEM_NFT_ADDRESS = resolveAddress('VITE_GAME_ITEM_NFT_ADDRESS');
-export const CONFIDENTIAL_GAME_COIN_ADDRESS = resolveAddress('VITE_CONFIDENTIAL_GAME_COIN_ADDRESS');
+export const ZAMA_QUEST_ADDRESS = "0xeb312bd271dd88662c7720eb395f77cef26b7cba";
+export const GAME_ITEM_NFT_ADDRESS = "0x40E85Db970833447fA540255F7A938177FaB119D";
+export const CONFIDENTIAL_GAME_COIN_ADDRESS = "0x08228f129bDBd8dA6288012Ef95c7512983AfE82";
 
 export const ZAMA_QUEST_CONTRACT = {
   address: ZAMA_QUEST_ADDRESS,

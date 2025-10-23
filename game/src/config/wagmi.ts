@@ -1,7 +1,7 @@
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { sepolia } from 'wagmi/chains';
 
-const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID ?? '';
+const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID ?? '000';
 
 export const config = getDefaultConfig({
   appName: 'Zama Encrypted Quest',
