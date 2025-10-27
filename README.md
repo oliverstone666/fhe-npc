@@ -8,7 +8,7 @@
 
 An interactive blockchain-based educational quest game that demonstrates the power of **Fully Homomorphic Encryption (FHE)** through engaging NPC dialogues, encrypted tokens, and privacy-preserving smart contracts. Built on Ethereum using Zama's FHEVM protocol.
 
-**Live Demo:** [[https://zama.quest](https://fhe-npc.netlify.app/)]([https://zama.quest](https://fhe-npc.netlify.app/)) (Sepolia Testnet)
+**Live Demo:** https://fhe-npc.netlify.app/ (Sepolia Testnet)
 
 ---
 
